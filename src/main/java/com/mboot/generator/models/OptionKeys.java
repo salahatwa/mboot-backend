@@ -6,7 +6,6 @@ package com.mboot.generator.models;
  */
 public final class OptionKeys {
     public static final OptionKey JSON_PATH = new OptionKey("json_path");
-    public static final OptionKey AMOUNT = new OptionKey("amount");
     public static final OptionKey LANGUAGE = new OptionKey("language");
     public static final OptionKey MERCHANT_REFERENCE = new OptionKey("merchant_reference");
     public static final OptionKey MERCHANT_IDENTIFIER = new OptionKey("merchant_identifier");

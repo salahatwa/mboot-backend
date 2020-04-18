@@ -62,7 +62,7 @@ public class GenenratorApi {
 
 		try {
 			
-			generate(response, options.get(OptionKeys.JSON_PATH).toString());
+			generate(response, options.get(OptionKeys.JSON_PATH).toString(),options);
 		} catch (ParseArgumentsUnexpectedException e) {
 			System.err.printf(Locale.ROOT, "[error] %s%n%nSee '%s help' for usage.%n", e.getMessage(), CLI_NAME);
 		} catch (ParseOptionMissingException | ParseOptionMissingValueException e) {
@@ -85,7 +85,7 @@ public class GenenratorApi {
 		try {
 			File resultFile = Files.createTempFile(UUID.randomUUID().toString().replaceAll("-", ""), "tmp").toFile();
 			FileUtils.copyInputStreamToFile(file.getInputStream(), resultFile);
-			generate(response, resultFile.getAbsolutePath());
+			generate(response, resultFile.getAbsolutePath(),options);
 			resultFile.deleteOnExit();
 		} catch (ParseArgumentsUnexpectedException e) {
 			System.err.printf(Locale.ROOT, "[error] %s%n%nSee '%s help' for usage.%n", e.getMessage(), CLI_NAME);
@@ -97,11 +97,11 @@ public class GenenratorApi {
 		return null;
 	}
 
-	private void generate(HttpServletResponse response, String input) throws IOException {
+	private void generate(HttpServletResponse response, String input,OptionParameter options) throws IOException {
 		String uniqueName = UUID.randomUUID().toString().replaceAll("-", "");
 		File resultFolder = Files.createTempDirectory(uniqueName).toFile();
 		log.info(resultFolder.getAbsolutePath());
-		String[] run = { "generate", "-i", input, "-g", "spring", "-o", resultFolder.getAbsolutePath() };
+		String[] run = { "generate", "-i", input, "-g", options.get(OptionKeys.LANGUAGE).toString(), "-o", resultFolder.getAbsolutePath() };
 		builder.build().parse(run).run();
 
 		ZipUtils.zipDirectoryStream(resultFolder, response);
