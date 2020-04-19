@@ -1,6 +1,7 @@
 package com.mboot.generator.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ public class StringToOptionConverter implements Converter<String, OptionParamete
 	@Override
 	@SneakyThrows
 	public OptionParameter convert(String source) {
+		System.out.println(source);
 			return objectMapper.readValue(source, OptionParameter.class);
 	}
 }

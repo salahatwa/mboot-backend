@@ -2,20 +2,29 @@ package com.mboot.generator;
 
 import static java.util.Arrays.asList;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ConversionServiceFactoryBean;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.mboot.generator.utils.StringToOptionConverter;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootApplication
-public class Application implements ApplicationRunner{
+public class Application implements ApplicationRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -25,7 +34,7 @@ public class Application implements ApplicationRunner{
 	public void run(ApplicationArguments args) throws Exception {
 		log.info("Generator started");
 	}
-	
+
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		final CorsConfiguration configuration = new CorsConfiguration();
@@ -44,5 +53,6 @@ public class Application implements ApplicationRunner{
 		return source;
 	}
 
+	
 
 }

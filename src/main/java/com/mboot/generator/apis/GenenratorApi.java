@@ -21,6 +21,7 @@ import org.openapitools.codegen.cmd.Meta;
 import org.openapitools.codegen.cmd.OpenApiGeneratorCommand;
 import org.openapitools.codegen.cmd.Validate;
 import org.openapitools.codegen.cmd.Version;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mboot.generator.models.OptionKeys;
 import com.mboot.generator.models.OptionParameter;
 import com.mboot.generator.utils.ZipUtils;
@@ -72,9 +74,12 @@ public class GenenratorApi {
 		}
 		return null;
 	}
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@PostMapping("/file")
-	public ResponseEntity<?> submit(HttpServletResponse response, @RequestParam OptionParameter options,
+	public ResponseEntity<?> submit(HttpServletResponse response, @RequestParam String options,
 			@RequestParam("file") MultipartFile file) {
 
 		response.setContentType("application/octet-stream");
@@ -85,7 +90,7 @@ public class GenenratorApi {
 		try {
 			File resultFile = Files.createTempFile(UUID.randomUUID().toString().replaceAll("-", ""), "tmp").toFile();
 			FileUtils.copyInputStreamToFile(file.getInputStream(), resultFile);
-			generate(response, resultFile.getAbsolutePath(),options);
+			generate(response, resultFile.getAbsolutePath(),objectMapper.readValue(options, OptionParameter.class));
 			resultFile.deleteOnExit();
 		} catch (ParseArgumentsUnexpectedException e) {
 			System.err.printf(Locale.ROOT, "[error] %s%n%nSee '%s help' for usage.%n", e.getMessage(), CLI_NAME);
